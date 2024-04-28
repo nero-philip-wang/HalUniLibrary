@@ -39,6 +39,91 @@
 /* Private function prototypes -----------------------------------------------*/
 static void APP_SystemClockConfig(void);
 
+void PWM_Init(void)
+{
+
+  TIM_HandleTypeDef TimHandle;
+  TIM_OC_InitTypeDef sConfig;
+  GPIO_InitTypeDef GPIO_InitStruct;
+  /*TIM1时钟使能 */
+  __HAL_RCC_TIM1_CLK_ENABLE();
+  /*GPIOA时钟使能 */
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  /*GPIOA时钟使能 */
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+  /*复用功能 */
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  /* 上拉 */
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  /* 高速*/
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+
+  /*GPIOA1初始化*/
+  GPIO_InitStruct.Pin = GPIO_PIN_1;
+  GPIO_InitStruct.Alternate = GPIO_AF13_TIM1;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /* 选择TIM1 */
+  TimHandle.Instance = TIM1;
+
+  /* 自动重装载值 */
+  TimHandle.Init.Period = 100;
+
+  /* 预分频为800-1 */
+  TimHandle.Init.Prescaler = 24 - 1;
+
+  /* 时钟不分频 */
+  TimHandle.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+
+  /* 向上计数*/
+  TimHandle.Init.CounterMode = TIM_COUNTERMODE_UP;
+
+  /* 不重复计数 */
+  TimHandle.Init.RepetitionCounter = 1 - 1;
+
+  /* 自动重装载寄存器没有缓冲 */
+  TimHandle.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+
+  /* 基础时钟初始化 */
+  if (HAL_TIM_Base_Init(&TimHandle) != HAL_OK)
+  {
+    APP_ErrorHandler();
+  }
+
+  /*输出配置为翻转模式 */
+  sConfig.OCMode = TIM_OCMODE_PWM1;
+
+  /*OC通道输出高电平有效 */
+  sConfig.OCPolarity = TIM_OCPOLARITY_HIGH;
+
+  /*输出快速使能关闭 */
+  sConfig.OCFastMode = TIM_OCFAST_DISABLE;
+
+  /*OCN通道输出高电平有效 */
+  sConfig.OCNPolarity = TIM_OCNPOLARITY_HIGH;
+
+  /*空闲状态OC1N输出低电平 */
+  sConfig.OCNIdleState = TIM_OCNIDLESTATE_RESET;
+
+  /*空闲状态OC1输出低电平*/
+  sConfig.OCIdleState = TIM_OCIDLESTATE_RESET;
+
+  /* CC4值为40,占空比=40/50=80% */
+  sConfig.Pulse = 99;
+
+  /*通道4配置 */
+  if (HAL_TIM_PWM_ConfigChannel(&TimHandle, &sConfig, TIM_CHANNEL_4) != HAL_OK)
+  {
+    APP_ErrorHandler();
+  }
+
+  /* 通道4开始输出PWM */
+  if (HAL_TIM_PWM_Start(&TimHandle, TIM_CHANNEL_4) != HAL_OK)
+  {
+    APP_ErrorHandler();
+  }
+}
+
 /**
  * @brief  Main program.
  * @retval int
@@ -51,13 +136,17 @@ int main(void)
   /* Configure the system clock */
   APP_SystemClockConfig();
 
-  TIM_HandleTypeDef *hTIM1 = uInitTim(TIM1, 8);
+  TIM_HandleTypeDef *hTIM1 = uInitTim(TIM1, 1000);
   uInitPWM(hTIM1, PA01, TIM_AF_PA01_CH4, TIM_CHANNEL_4);
-  uStartPwm(hTIM1, TIM_CHANNEL_4, 10);
-
+  // PWM_Init();
   /* Infinite loop */
+  int f = 980;
   while (1)
   {
+    HAL_Delay(50);
+    if (++f > 1000)
+      f = 980;
+    uStartPwm(hTIM1, TIM_CHANNEL_4, f);
   }
 }
 

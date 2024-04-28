@@ -2,17 +2,18 @@
 #include "u_tim.h"
 
 TIM_OC_InitTypeDef _PWMConfig = {0};
+extern TIM_HandleTypeDef _handleTim;
 
 void uInitPWM(TIM_HandleTypeDef *tim, uint32_t pin, uint32_t alternate, uint32_t channel)
 {
     _U_RCC_GPIO_CLK_ENABLE(pin);
     GPIO_InitTypeDef GPIO_InitStruct;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-    GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     GPIO_InitStruct.Alternate = alternate;
-    GPIO_InitStruct.Pin = _U_PIN_NO(pin);
-    HAL_GPIO_Init(_U_GPIOX(pin), &GPIO_InitStruct);
+    GPIO_InitStruct.Pin = GPIO_PIN_1;       //_U_PIN_NO(pin);
+    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct); //_U_GPIOX(pin)
 
     // 配置 pwm
     _PWMConfig.OCMode = TIM_OCMODE_PWM1;             /* 配置为PWM1 */

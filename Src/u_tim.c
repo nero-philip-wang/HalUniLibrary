@@ -15,7 +15,7 @@ TIM_HandleTypeDef *uInitTim(TIM_TypeDef *instance, int16_t freq)
     _handleTim.Init.CounterMode = TIM_COUNTERMODE_UP;                     /* 向上计数 */
     _handleTim.Init.RepetitionCounter = 1 - 1;                            /* 不重复计数 */
     _handleTim.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;   /* 自动重装载寄存器没有缓冲 */
-    if (HAL_TIM_PWM_Init(&_handleTim) != HAL_OK)                          /* PWM初始化 */
+    if (HAL_TIM_Base_Init(&_handleTim) != HAL_OK)                         /* PWM初始化 HAL_TIM_PWM_Init */
         return 0;
 
     return &_handleTim;
