@@ -1,0 +1,31 @@
+{
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "./Inc",
+                "C:/Keil_v5/ARM/Pack/Puya/PY32F0xx_DFP/1.2.0/Drivers/CMSIS/Device/Puya/PY32F0xx/Include",
+                "C:/Keil_v5/ARM/Pack/Puya/PY32F0xx_DFP/1.2.0/Drivers/PY32F0xx_HAL_Driver/Inc",
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "./Inc",
+                    "C:/Keil_v5/ARM/Pack/Puya/PY32F0xx_DFP/1.2.0/Drivers/CMSIS/Device/Puya/PY32F0xx/Include",
+                    "C:/Keil_v5/ARM/Pack/Puya/PY32F0xx_DFP/1.2.0/Drivers/PY32F0xx_HAL_Driver/Inc",
+                ]
+            },
+            "defines": [
+                "USE_HAL_DRIVER",
+                "PY32F002Ax5",
+            ],
+            "compilerPath": "C:/Program Files (x86)/GNU Arm Embedded Toolchain/10 2021.10/bin/arm-none-eabi-gcc.exe",
+            "compilerArgs": [
+                "-mthumb",
+                "-mcpu=cortex-m3",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}

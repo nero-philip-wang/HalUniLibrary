@@ -1,0 +1,19 @@
+{
+    "files.associations": {
+        "py32f0xx_ll_bus.h": "c",
+        "gpio.h": "c",
+        "common.h": "c",
+        "clock.h": "c",
+        "i2c1.h": "c",
+        "serial.h": "c",
+        "pindefine.h": "c",
+        "main.h": "c",
+        "py32f0xx_hal.h": "c",
+        "adc.h": "c",
+        "app_fonts.h": "c",
+        "py32f0xx_hal_conf.h": "c",
+        "app_ssd1306.h": "c",
+        "pwm.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
+}
