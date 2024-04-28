@@ -13,7 +13,13 @@
         "app_fonts.h": "c",
         "py32f0xx_hal_conf.h": "c",
         "app_ssd1306.h": "c",
-        "pwm.h": "c"
+        "pwm.h": "c",
+        "py32f0xx_hal_i2c.h": "c",
+        "u_tim.h": "c",
+        "u_common.h": "c",
+        "py32f0xx_ll_tim.h": "c",
+        "u_pwm.h": "c",
+        "u_gpio_af.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

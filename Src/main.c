@@ -30,7 +30,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "u_common.h"
+#include "u_pwm.h"
 
 /* Private define ------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -51,7 +51,9 @@ int main(void)
   /* Configure the system clock */
   APP_SystemClockConfig();
 
-  _U_RCC_GPIO_CLK_ENABLE(PA01);
+  TIM_HandleTypeDef *hTIM1 = uInitTim(TIM1, 8);
+  uInitPWM(hTIM1, PA01, TIM_AF_PA01_CH4, TIM_CHANNEL_4);
+  uStartPwm(hTIM1, TIM_CHANNEL_4, 10);
 
   /* Infinite loop */
   while (1)
