@@ -137,7 +137,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2CM3.DLL</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -385,6 +385,21 @@
               <FileType>2</FileType>
               <FilePath>.\startup_py32f002xx.s</FilePath>
             </File>
+            <File>
+              <FileName>u_clock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\u_clock.c</FilePath>
+            </File>
+            <File>
+              <FileName>u_pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\u_pwm.c</FilePath>
+            </File>
+            <File>
+              <FileName>u_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\u_tim.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -405,25 +420,15 @@
               <FileType>1</FileType>
               <FilePath>..\Src\py32f0xx_it.c</FilePath>
             </File>
-            <File>
-              <FileName>u_pwm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\u_pwm.c</FilePath>
-            </File>
-            <File>
-              <FileName>u_tim.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\u_tim.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>Doc</GroupName>
           <Files>
             <File>
-              <FileName>readme.txt</FileName>
+              <FileName>readme.md</FileName>
               <FileType>5</FileType>
-              <FilePath>..\readme.txt</FilePath>
+              <FilePath>..\readme.md</FilePath>
             </File>
           </Files>
         </Group>
@@ -446,6 +451,12 @@
           <targetInfo name="PY32F002Ax5_Project"/>
         </targetInfos>
       </component>
+      <component Cbundle="PY32F0xx Standalone" Cclass="Drivers" Cgroup="PY32F0xx HAL Driver" Csub="ADC" Cvendor="Puya" Cversion="1.1.5" condition="PY32F0xx HAL">
+        <package name="PY32F0xx_DFP" schemaVersion="1.7.27" url="https://www.puyasemi.com/uploadfiles/" vendor="Puya" version="1.2.0"/>
+        <targetInfos>
+          <targetInfo name="PY32F002Ax5_Project"/>
+        </targetInfos>
+      </component>
       <component Cbundle="PY32F0xx Standalone" Cclass="Drivers" Cgroup="PY32F0xx HAL Driver" Csub="COMMON" Cvendor="Puya" Cversion="1.1.5" Pre_Include_Global_h="#define USE_HAL_DRIVER&#xD;&#xA;#define USE_FULL_LL_DRIVER" condition="PY32F0xx HAL">
         <package name="PY32F0xx_DFP" schemaVersion="1.7.27" url="https://www.puyasemi.com/uploadfiles/" vendor="Puya" version="1.2.0"/>
         <targetInfos>
@@ -458,7 +469,19 @@
           <targetInfo name="PY32F002Ax5_Project"/>
         </targetInfos>
       </component>
+      <component Cbundle="PY32F0xx Standalone" Cclass="Drivers" Cgroup="PY32F0xx HAL Driver" Csub="FLASH" Cvendor="Puya" Cversion="1.1.5" condition="PY32F0xx HAL">
+        <package name="PY32F0xx_DFP" schemaVersion="1.7.27" url="https://www.puyasemi.com/uploadfiles/" vendor="Puya" version="1.2.0"/>
+        <targetInfos>
+          <targetInfo name="PY32F002Ax5_Project"/>
+        </targetInfos>
+      </component>
       <component Cbundle="PY32F0xx Standalone" Cclass="Drivers" Cgroup="PY32F0xx HAL Driver" Csub="GPIO" Cvendor="Puya" Cversion="1.1.5" condition="PY32F0xx HAL">
+        <package name="PY32F0xx_DFP" schemaVersion="1.7.27" url="https://www.puyasemi.com/uploadfiles/" vendor="Puya" version="1.2.0"/>
+        <targetInfos>
+          <targetInfo name="PY32F002Ax5_Project"/>
+        </targetInfos>
+      </component>
+      <component Cbundle="PY32F0xx Standalone" Cclass="Drivers" Cgroup="PY32F0xx HAL Driver" Csub="I2C" Cvendor="Puya" Cversion="1.1.5" condition="PY32F0xx HAL">
         <package name="PY32F0xx_DFP" schemaVersion="1.7.27" url="https://www.puyasemi.com/uploadfiles/" vendor="Puya" version="1.2.0"/>
         <targetInfos>
           <targetInfo name="PY32F002Ax5_Project"/>
@@ -484,7 +507,7 @@
       </component>
     </components>
     <files>
-      <file attr="config" category="header" name="MDK\Templates\PY32F002A\Inc\py32f0xx_hal_conf.h" version="0.0.0">
+      <file attr="config" category="header" name="MDK\Templates\PY32F002A\Inc\py32f0xx_hal_conf.h" version="1.1.5">
         <instance index="0">RTE\Drivers\PY32F002Ax5\py32f0xx_hal_conf.h</instance>
         <component Cbundle="PY32F0xx Standalone" Cclass="Drivers" Cgroup="PY32F0xx HAL Driver" Csub="COMMON" Cvendor="Puya" Cversion="1.1.5" Pre_Include_Global_h="#define USE_HAL_DRIVER&#xD;&#xA;#define USE_FULL_LL_DRIVER" condition="PY32F0xx HAL"/>
         <package name="PY32F0xx_DFP" schemaVersion="1.7.27" url="https://www.puyasemi.com/uploadfiles/" vendor="Puya" version="1.2.0"/>

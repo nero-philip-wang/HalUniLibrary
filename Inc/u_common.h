@@ -14,13 +14,27 @@ typedef void (*Func_String_Void)(uint8_t *);
 
 #ifndef U_COMMON
 #define U_COMMON
-// 获取第一个是1的bit
-static inline int8_t BitFlag(uint32_t u)
+
+/// @brief 获取第一个是1的bit
+/// @param u
+/// @return
+static inline int8_t uFirst1Bit(uint32_t u)
 {
     int8_t bit = -1;
     while (++bit < 32 && u)
         if (u >> bit & 1)
             return bit;
     return bit;
+}
+
+/// @brief 暂定指定毫秒
+/// @param ms
+static void uSleep(uint16_t ms)
+{
+    uint32_t then = HAL_GetTick() + ms;
+    while (HAL_GetTick() < then)
+    {
+        __nop();
+    }
 }
 #endif

@@ -6,16 +6,8 @@
  ******************************************************************************
  * @attention
  *
- * <h2><center>&copy; Copyright (c) 2023 Puya Semiconductor Co.
+ * <h2><center>&copy; Copyright (c) Puya Semiconductor Co.
  * All rights reserved.</center></h2>
- *
- * This software component is licensed by Puya under BSD 3-Clause license,
- * the "License"; You may not use this file except in compliance with the
- * License. You may obtain a copy of the License at:
- *                        opensource.org/licenses/BSD-3-Clause
- *
- ******************************************************************************
- * @attention
  *
  * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
  * All rights reserved.</center></h2>
@@ -46,26 +38,26 @@ extern "C"
  */
 #define HAL_MODULE_ENABLED
 #define HAL_RCC_MODULE_ENABLED
-/* #define HAL_ADC_MODULE_ENABLED */
-/* #define HAL_CRC_MODULE_ENABLED */
-/* #define HAL_COMP_MODULE_ENABLED */
+#define HAL_ADC_MODULE_ENABLED
+#define HAL_CRC_MODULE_ENABLED
+#define HAL_COMP_MODULE_ENABLED
 #define HAL_FLASH_MODULE_ENABLED
 #define HAL_GPIO_MODULE_ENABLED
-/* #define HAL_IWDG_MODULE_ENABLED */
+#define HAL_IWDG_MODULE_ENABLED
 #define HAL_TIM_MODULE_ENABLED
-/* #define HAL_LPTIM_MODULE_ENABLED */
+#define HAL_LPTIM_MODULE_ENABLED
 #define HAL_PWR_MODULE_ENABLED
-/* #define HAL_I2C_MODULE_ENABLED */
-/* #define HAL_UART_MODULE_ENABLED  */
-/* #define HAL_SPI_MODULE_ENABLED */
-/* #define HAL_EXTI_MODULE_ENABLED */
+#define HAL_I2C_MODULE_ENABLED
+#define HAL_UART_MODULE_ENABLED
+#define HAL_SPI_MODULE_ENABLED
+#define HAL_EXTI_MODULE_ENABLED
 #define HAL_CORTEX_MODULE_ENABLED
 
   /* ########################## Oscillator Values adaptation ####################*/
 
 #if !defined(HSI_VALUE)
-#define HSI_VALUE ((uint32_t)8000000) /*!< Value of the Internal oscillator in Hz */
-#endif                                /* HSI_VALUE */
+#define HSI_VALUE ((uint32_t)24000000) /*!< Value of the Internal oscillator in Hz */
+#endif                                 /* HSI_VALUE */
 
 /**
  * @brief Adjust the value of External High Speed oscillator (HSE) used in your application.

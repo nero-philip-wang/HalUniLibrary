@@ -12,4 +12,4 @@
 /// @param instance TIM_TypeDef
 /// @param freq PWM的频率 = 时钟频率  / (自动重装载值1000) * (预分频值 + 1), 需要能够整除
 /// @return
-extern TIM_HandleTypeDef *uInitTim(TIM_TypeDef *instance, int16_t freq);
+extern inline TIM_HandleTypeDef *uInitTim(TIM_TypeDef *instance, int16_t freq);
