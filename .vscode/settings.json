@@ -22,7 +22,9 @@
         "u_gpio_af.h": "c",
         "u_pin_define.h": "c",
         "u_clock.h": "c",
-        "py32f0xx_hal_rcc.h": "c"
+        "py32f0xx_hal_rcc.h": "c",
+        "u_gpio.h": "c",
+        "u_flash.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
