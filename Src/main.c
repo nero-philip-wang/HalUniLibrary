@@ -32,6 +32,9 @@
 #include "main.h"
 // #include "u_pwm.h"
 #include "u_common.h"
+#include "u_gpio.h"
+#include "u_serial.h"
+#include "u_adc.h"
 
 /* Private define ------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -49,25 +52,26 @@ int main(void)
   HAL_Init();
 
   /* Configure the system clock */
-  uInitSystemClock();
+  // uInitSystemClock();
 
   // TIM_HandleTypeDef *hTIM1 = uInitTim(TIM1, 1000);
   // uInitPWM(hTIM1, PA01, TIM_AF_PA01_CH4, TIM_CHANNEL_4);
-  GPIO_NAME pin = PA06;
-  _U_RCC_GPIO_CLK_ENABLE(pin);
-  GPIO_InitTypeDef GPIO_InitStruct;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  GPIO_InitStruct.Pin = GPIO_PIN_6;       //_U_PIN_NO(pin);
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct); //_U_GPIOX(pin)
+  uGPIOInit(PA06, GPIO_MODE_OUTPUT_OD, GPIO_NOPULL, GPIO_SPEED_FREQ_HIGH);
+  // uSerial1Init(PA02, PA03, GPIO_AF1_USART1, 115200);
+  uInitAdc();
+
+  uAddAdcChannel(PB01, ADC_CHANNEL_9);
 
   /* Infinite loop */
-  int f = 980;
+
   while (1)
   {
-    uSleep(30);
-    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_6);
+
+    int f = (int)uGetAdcValue()[0];
+
+    uSleep(f);
+    uGPIOTriggerPin(PA06);
+    // printf("1234");
     // HAL_Delay(50);
     // if (++f > 1000)
     //   f = 980;

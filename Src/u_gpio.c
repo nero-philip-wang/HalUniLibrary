@@ -36,22 +36,22 @@ void inline uGPIOInit(GPIO_NAME pin, uint32_t mode, uint32_t pull, uint32_t spee
     }
 }
 
-inline GPIO_PinState GPIO_ReadPin(GPIO_NAME pin)
+inline GPIO_PinState uGPIOReadPin(GPIO_NAME pin)
 {
     return HAL_GPIO_ReadPin(_U_GPIOX(pin), _U_PIN_NO(pin));
 }
 
-inline void GPIO_WritePin(GPIO_NAME pin, GPIO_PinState value)
+inline void uGPIOWritePin(GPIO_NAME pin, GPIO_PinState value)
 {
     HAL_GPIO_WritePin(_U_GPIOX(pin), _U_PIN_NO(pin), value);
 }
 
-inline void GPIO_TriggerPin(GPIO_NAME pin)
+inline void uGPIOTriggerPin(GPIO_NAME pin)
 {
     HAL_GPIO_TogglePin(_U_GPIOX(pin), _U_PIN_NO(pin));
 }
 
-inline void AddKeyPresssHandle(Func_Int_Void task)
+void uAddKeyPresssHandle(Func_Int_Void task)
 {
     _onKeyPresss = task;
 }
@@ -61,7 +61,7 @@ void EXTI0_1_IRQHandler(void)
     uint32_t now = HAL_GetTick();
     if (_onKeyPresss && now >= _lastClickTime + GPIO_INPUT_Interval)
     {
-        _onKeyPresss(BitFlag(EXTI->PR));
+        _onKeyPresss(uFirst1Bit(EXTI->PR));
         _lastClickTime = now;
     }
     HAL_GPIO_EXTI_IRQHandler(EXTI->PR);

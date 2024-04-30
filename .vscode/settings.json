@@ -24,7 +24,8 @@
         "u_clock.h": "c",
         "py32f0xx_hal_rcc.h": "c",
         "u_gpio.h": "c",
-        "u_flash.h": "c"
+        "u_flash.h": "c",
+        "u_serial.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

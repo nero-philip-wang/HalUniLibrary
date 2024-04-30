@@ -12,7 +12,7 @@ extern inline void uGPIOWritePin(GPIO_NAME pin, GPIO_PinState value);
 
 extern inline void uGPIOTriggerPin(GPIO_NAME pin);
 
-extern inline void uAddKeyPresssHandle(Func_Int_Void task);
+extern void uAddKeyPresssHandle(Func_Int_Void task);
 
 extern void EXTI0_1_IRQHandler(void);
 

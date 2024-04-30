@@ -400,6 +400,21 @@
               <FileType>1</FileType>
               <FilePath>..\Src\u_tim.c</FilePath>
             </File>
+            <File>
+              <FileName>u_gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\u_gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>u_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\u_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>u_serial.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\u_serial.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -500,6 +515,12 @@
         </targetInfos>
       </component>
       <component Cbundle="PY32F0xx Standalone" Cclass="Drivers" Cgroup="PY32F0xx HAL Driver" Csub="TIM" Cvendor="Puya" Cversion="1.1.5" condition="PY32F0xx HAL">
+        <package name="PY32F0xx_DFP" schemaVersion="1.7.27" url="https://www.puyasemi.com/uploadfiles/" vendor="Puya" version="1.2.0"/>
+        <targetInfos>
+          <targetInfo name="PY32F002Ax5_Project"/>
+        </targetInfos>
+      </component>
+      <component Cbundle="PY32F0xx Standalone" Cclass="Drivers" Cgroup="PY32F0xx HAL Driver" Csub="UART" Cvendor="Puya" Cversion="1.1.5" condition="PY32F0xx HAL">
         <package name="PY32F0xx_DFP" schemaVersion="1.7.27" url="https://www.puyasemi.com/uploadfiles/" vendor="Puya" version="1.2.0"/>
         <targetInfos>
           <targetInfo name="PY32F002Ax5_Project"/>

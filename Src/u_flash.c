@@ -51,7 +51,7 @@ void uWriteFlash(uint32_t *src)
   src[0] = PAGE_IN_USE;
   if (pageAddr > FLASH_END)
   {
-    EraseFlash(0);
+    uEraseFlash(0);
     pageAddr = USER_FLASH_START;
   }
   HAL_FLASH_PageProgram(pageAddr, src);
