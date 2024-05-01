@@ -1,12 +1,14 @@
 #include "u_common.h"
 
+// #define USE_VREF_CALIBRATION
+
 extern ADC_HandleTypeDef uAdcHandle;
 
 extern float adcvalue[12];
 
 extern uint8_t _channelLen;
 
-extern float T_VCC;
+extern float mvPerCell;
 
 extern void uInitAdc();
 

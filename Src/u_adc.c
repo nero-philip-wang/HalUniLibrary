@@ -1,11 +1,15 @@
 #include "u_adc.h"
+#define Tv30 (float)(HAL_ADC_TSCAL1 * mvPerCell)
+#define Tv85 (float)(HAL_ADC_TSCAL2 * mvPerCell)
+#define k (float)((Tv85 - Tv30) / (85 - 30))
+
 ADC_HandleTypeDef uAdcHandle = {0};
 
 float adcvalue[12];
 
 uint8_t _channelLen = 0;
 
-float T_VCC = 0;
+float mvPerCell = 1.0f * VDD_VALUE / 4095;
 
 void uInitAdc()
 {
@@ -30,20 +34,10 @@ void uInitAdc()
     {
         APP_ErrorHandler();
     }
+#ifdef USE_VREF_CALIBRATION
     // VCC 电压校准
-    T_VCC = _CalibrationVREF();
-
-    // __HAL_RCC_ADC_FORCE_RESET();
-    // __HAL_RCC_ADC_RELEASE_RESET();
-    // if (HAL_ADC_Init(&uAdcHandle) != HAL_OK)
-    // {
-    //     APP_ErrorHandler();
-    // }
-    // // ADC校准
-    // if (HAL_ADCEx_Calibration_Start(&uAdcHandle) != HAL_OK)
-    // {
-    //     APP_ErrorHandler();
-    // }
+    mvPerCell = _CalibrationVREF();
+#endif
 }
 
 void uAddAdcChannel(GPIO_NAME pin, uint32_t channel)
@@ -55,7 +49,7 @@ void uAddAdcChannel(GPIO_NAME pin, uint32_t channel)
         GPIO_InitTypeDef GPIO_InitStruct;
         GPIO_InitStruct.Pin = _U_PIN_NO(pin);
         GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-        GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+        GPIO_InitStruct.Pull = GPIO_NOPULL;
         HAL_GPIO_Init(_U_GPIOX(pin), &GPIO_InitStruct);
     }
     // 通道配置
@@ -96,14 +90,14 @@ float *uGetAdcValue()
     {
         HAL_ADC_PollForConversion(&uAdcHandle, 10);
         uint32_t raw = HAL_ADC_GetValue(&uAdcHandle);
-        adcvalue[i] = raw * T_VCC;
+        adcvalue[i] = raw * mvPerCell;
     }
     return adcvalue;
 }
 
-float uConvert2Temperature(float adcvalue)
+float inline uConvert2Temperature(float adcvalue)
 {
-    return 0;
+    return (adcvalue - Tv30) / k + 30;
 }
 
 float _CalibrationVREF()
@@ -120,16 +114,17 @@ float _CalibrationVREF()
     {
         APP_ErrorHandler();
     }
-    uSleep(10);
+    uSleep(100);
     if (HAL_ADC_Start(&uAdcHandle) != HAL_OK)
         APP_ErrorHandler();
 
     uint32_t aADCxConvertedData = 0;
     for (uint8_t i = 0; i < 5; i++)
     {
+        uSleep(10);
         if (HAL_ADC_PollForConversion(&uAdcHandle, 1000) != HAL_OK)
             APP_ErrorHandler();
-        aADCxConvertedData += HAL_ADC_GetValue(&uAdcHandle);
+        aADCxConvertedData += HAL_ADC_GetValue(&uAdcHandle) / 5;
     }
 
     innerConfig.Rank = ADC_RANK_NONE;
@@ -137,5 +132,5 @@ float _CalibrationVREF()
     {
         APP_ErrorHandler();
     }
-    return 1200.0f * 5 / aADCxConvertedData;
+    return 1200.0f / aADCxConvertedData;
 }

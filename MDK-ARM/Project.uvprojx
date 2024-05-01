@@ -415,6 +415,26 @@
               <FileType>1</FileType>
               <FilePath>..\Src\u_serial.c</FilePath>
             </File>
+            <File>
+              <FileName>u_adc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\u_adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>u_app_fonts.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\u_app_fonts.c</FilePath>
+            </File>
+            <File>
+              <FileName>u_app_ssd1306.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\u_app_ssd1306.c</FilePath>
+            </File>
+            <File>
+              <FileName>u_i2c1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\u_i2c1.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -25,7 +25,11 @@
         "py32f0xx_hal_rcc.h": "c",
         "u_gpio.h": "c",
         "u_flash.h": "c",
-        "u_serial.h": "c"
+        "u_serial.h": "c",
+        "u_adc.h": "c",
+        "u_app_fonts.h": "c",
+        "u_app_ssd1306.h": "c",
+        "py32f0xx_ll_i2c.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

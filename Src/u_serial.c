@@ -44,6 +44,8 @@ void uSerial1Init(uint16_t tx, uint16_t rx, uint32_t alternate, uint32_t speed)
 
     /* USART1初始化 */
     __HAL_RCC_USART1_CLK_ENABLE();
+    __HAL_RCC_USART1_FORCE_RESET();
+    __HAL_RCC_USART1_RELEASE_RESET();
     uSerial1Handle.Init.BaudRate = speed;
     if (HAL_UART_Init(&uSerial1Handle) != HAL_OK)
     {
@@ -68,15 +70,14 @@ void USART1_IRQHandler(void)
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *uSerial1Handle)
 {
-    _rxLen++;
+    _rxString[_rxLen++] = _charBuff;
     // 接收到字符串结束,或者缓存满
     if (_charBuff == '\0' || _charBuff == '\n' || _rxLen >= RX_BUFF_LEN - 1)
     {
-        _rxString[_rxLen] = _charBuff;
         if (_rxCallback)
             _rxCallback(_rxString);
-        _rxLen = 0;
         memset(_rxString, 0, RX_BUFF_LEN);
+        _rxLen = 0;
     }
     /*通过中断方式接收数据*/
     if (HAL_UART_Receive_IT(uSerial1Handle, &_charBuff, 1) != HAL_OK)

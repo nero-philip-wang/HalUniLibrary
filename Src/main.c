@@ -35,13 +35,20 @@
 #include "u_gpio.h"
 #include "u_serial.h"
 #include "u_adc.h"
+#include "math.h"
+#include "u_i2c1.h"
+#include "u_app_fonts.h"
+#include "u_app_ssd1306.h"
 
 /* Private define ------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private user code ---------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
-
+static void onchar(uint8_t *c)
+{
+  printf("get:%s", c);
+}
 /**
  * @brief  Main program.
  * @retval int
@@ -52,26 +59,42 @@ int main(void)
   HAL_Init();
 
   /* Configure the system clock */
-  // uInitSystemClock();
+  uInitSystemClock();
 
   // TIM_HandleTypeDef *hTIM1 = uInitTim(TIM1, 1000);
   // uInitPWM(hTIM1, PA01, TIM_AF_PA01_CH4, TIM_CHANNEL_4);
   uGPIOInit(PA06, GPIO_MODE_OUTPUT_OD, GPIO_NOPULL, GPIO_SPEED_FREQ_HIGH);
+
   // uSerial1Init(PA02, PA03, GPIO_AF1_USART1, 115200);
+  // AddRxHandle(onchar);
+
   uInitAdc();
-
   uAddAdcChannel(PB01, ADC_CHANNEL_9);
+  uAddAdcChannel(0, ADC_CHANNEL_TEMPSENSOR);
 
-  /* Infinite loop */
+  uInitI2C1(PA02, PA03, GPIO_AF12_I2C, 400 * 1000);
+  ssd1306_Init();
+  ssd1306_Fill(1);
+  ssd1306_UpdateScreen();
 
+  int dey = 0;
   while (1)
   {
 
-    int f = (int)uGetAdcValue()[0];
+    float *f = uGetAdcValue();
+    float deg = uConvert2Temperature(f[1]);
 
-    uSleep(f);
+    uSleep(1000);
     uGPIOTriggerPin(PA06);
-    // printf("1234");
+    char ser[32];
+    sprintf(ser, "%ims | %.1fd,%.2fv", dey, deg, f[0] / 1000);
+
+    uint32_t t1 = HAL_GetTick();
+    ssd1306_SetCursor(1, 1);
+    ssd1306_WriteString(ser, Font_6x8, 0);
+    ssd1306_UpdatePage(0);
+    dey = HAL_GetTick() - t1;
+
     // HAL_Delay(50);
     // if (++f > 1000)
     //   f = 980;
