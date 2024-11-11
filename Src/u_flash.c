@@ -24,6 +24,33 @@ __root const uint32_t u32ICG[] @0x1FFF0E80 =
 
 #endif /* FLASH_OPT_PROGRAM_ENABLED */
 
+/*
+每个page 128 byte，每次必须写入一个page，即32个int/float,
+前4个byte = 32bit
+0xffffffff 代表全部可用，没有数据写入
+0xffffffff << 1 代表 数据已经写入到1个数据位
+0xffffffff << 31 代表 数据已经写入到31个数据位, 即已写满
+*/
+// struct flashDataTemplate
+// {
+//   uint32_t ptr;
+//   uint32_t[31] data;
+// };
+
+// uint32_t uReadWord(uint32_t *pageAddr)
+// {
+//   uint32_t ptr = HW32_REG(pageAddr);
+//   if (ptr == 0xffffffff)
+//     return 0 uint8_t bit = 0;
+//   while (ptr << ++bit)
+//   {
+//   }
+//   bit = 31 - bit return HW32_REG(pageAddr + bit)
+// }
+// uint32_t uWriteWord(uint32_t *pageAddr, uint32_t value)
+// {
+// }
+
 void uEraseFlash(uint8_t lock)
 {
   uint32_t SECTORError = 0;

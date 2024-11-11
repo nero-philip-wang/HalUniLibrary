@@ -74,12 +74,16 @@ extern SPI_HandleTypeDef SSD1306_SPI_PORT;
 
 // SSD1306 OLED height in pixels
 #ifndef SSD1306_HEIGHT
-#define SSD1306_HEIGHT 32
+#define SSD1306_HEIGHT 64
 #endif
 
 // SSD1306 width in pixels
 #ifndef SSD1306_WIDTH
 #define SSD1306_WIDTH 128
+#endif
+
+#ifndef SSD1306_PAGE
+#define SSD1306_PAGE SSD1306_HEIGHT / 8
 #endif
 
 #ifndef SSD1306_BUFFER_SIZE
@@ -120,8 +124,8 @@ void ssd1306_Fill(SSD1306_COLOR color);
 void ssd1306_UpdateScreen(void);
 void ssd1306_UpdatePage(uint8_t i);
 void ssd1306_DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color);
-char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color);
-char ssd1306_WriteString(char *str, FontDef Font, SSD1306_COLOR color);
+void ssd1306_WriteChar(char ch, ZFontDef * Font, SSD1306_COLOR color);
+void ssd1306_WriteString(char *str, ZFontDef * Font, SSD1306_COLOR color);
 void ssd1306_SetCursor(uint8_t x, uint8_t y);
 void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
 void ssd1306_DrawArc(uint8_t x, uint8_t y, uint8_t radius, uint16_t start_angle, uint16_t sweep, SSD1306_COLOR color);
@@ -132,6 +136,9 @@ void ssd1306_Polyline(const SSD1306_VERTEX *par_vertex, uint16_t par_size, SSD13
 void ssd1306_DrawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
 void ssd1306_FillRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
 void ssd1306_DrawBitmap(uint8_t x, uint8_t y, const unsigned char *bitmap, uint8_t w, uint8_t h, SSD1306_COLOR color);
+
+void ssd1306_DrawImage(uint8_t x, uint8_t y, uint8_t width, uint8_t height, const uint8_t *image, SSD1306_COLOR color);
+void ssd1306_FillArea(uint8_t x, uint8_t y, uint8_t width, uint8_t height, SSD1306_COLOR color);
 
 /**
  * @brief Sets the contrast of the display.

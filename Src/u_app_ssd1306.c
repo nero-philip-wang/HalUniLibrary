@@ -90,7 +90,7 @@ void ssd1306_Init(void)
     ssd1306_SetDisplayOn(0); // display off
 
     ssd1306_WriteCommand(0x20); // Set Memory Addressing Mode
-    ssd1306_WriteCommand(0x00); // 00b,Horizontal Addressing Mode; 01b,Vertical Addressing Mode;
+    ssd1306_WriteCommand(0x02); // 00b,Horizontal Addressing Mode; 01b,Vertical Addressing Mode;
                                 // 10b,Page Addressing Mode (RESET); 11b,Invalid
 
     ssd1306_WriteCommand(0xB0); // Set Page Start Address for Page Addressing Mode,0-7
@@ -244,67 +244,53 @@ void ssd1306_DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color)
     }
 }
 
-/*
- * Draw 1 char to the screen buffer
- * ch       => char om weg te schrijven
- * Font     => Font waarmee we gaan schrijven
- * color    => Black or White
- */
-char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color)
+void ssd1306_WriteChar(char ch, ZFontDef *Font, SSD1306_COLOR color)
 {
     uint32_t i, b, j;
 
     // Check if character is valid
-    if (ch < 32 || ch > 126)
-        return 0;
+    if (ch < Font->CharStart || ch > 255)
+        return ;
 
     // Check remaining space on current line
-    if (SSD1306_WIDTH < (SSD1306.CurrentX + Font.FontWidth) ||
-        SSD1306_HEIGHT < (SSD1306.CurrentY + Font.FontHeight))
+    if (SSD1306_WIDTH < (SSD1306.CurrentX + Font->FontWidth) ||
+        SSD1306_HEIGHT < (SSD1306.CurrentY + Font->FontHeight))
     {
         // Not enough space on current line
-        return 0;
+        return;
     }
 
     // Use the font to write
-    for (i = 0; i < Font.FontHeight; i++)
+    if (ch >= Font->DWCharStart)
     {
-        b = Font.data[(ch - 32) * Font.FontHeight + i];
-        for (j = 0; j < Font.FontWidth; j++)
-        {
-            if ((b << j) & 0x8000)
-            {
-                ssd1306_DrawPixel(SSD1306.CurrentX + j, (SSD1306.CurrentY + i), (SSD1306_COLOR)color);
-            }
-            else
-            {
-                ssd1306_DrawPixel(SSD1306.CurrentX + j, (SSD1306.CurrentY + i), (SSD1306_COLOR)!color);
-            }
-        }
+        ssd1306_DrawImage(SSD1306.CurrentX, SSD1306.CurrentY, Font->FontWidth *2, Font->FontHeight,
+                          Font->DWCharData + (ch - Font->DWCharStart) * Font->BytePreChar * 2, color);
+        SSD1306.CurrentX += Font->FontWidth;
+    }
+    else
+    {
+        ssd1306_DrawImage(SSD1306.CurrentX, SSD1306.CurrentY, Font->FontWidth, Font->FontHeight,
+                          Font->AscIIData + (ch - Font->CharStart) * Font->BytePreChar, color);
     }
 
     // The current space is now taken
-    SSD1306.CurrentX += Font.FontWidth;
+    SSD1306.CurrentX += Font->FontWidth;
 
     // Return written char for validation
-    return ch;
+    return;
 }
 
 /* Write full string to screenbuffer */
-char ssd1306_WriteString(char *str, FontDef Font, SSD1306_COLOR color)
+void ssd1306_WriteString(char *str, ZFontDef *Font, SSD1306_COLOR color)
 {
     while (*str)
     {
-        if (ssd1306_WriteChar(*str, Font, color) != *str)
-        {
-            // Char could not be written
-            return *str;
-        }
+        ssd1306_WriteChar(*str, Font, color);
         str++;
     }
 
     // Everything ok
-    return *str;
+    return;
 }
 
 /* Position the cursor */
@@ -625,6 +611,121 @@ void ssd1306_DrawBitmap(uint8_t x, uint8_t y, const unsigned char *bitmap, uint8
         }
     }
     return;
+}
+
+/**
+ * 函    数：OLED显示图像
+ * 参    数：X 指定图像左上角的横坐标，范围：-32768~32767，屏幕区域：0~127
+ * 参    数：Y 指定图像左上角的纵坐标，范围：-32768~32767，屏幕区域：0~63
+ * 参    数：Width 指定图像的宽度，范围：0~128
+ * 参    数：Height 指定图像的高度，范围：0~64
+ * 参    数：Image 指定要显示的图像， image数组顺序为和SSD1306的显存顺序一致，优先从左到右记录8个高度的线，达到图像最大宽度后，转到下一页，从头开始重复
+ * 返 回 值：无
+ * 说    明：调用此函数后，要想真正地呈现在屏幕上，还需调用更新函数
+ */
+void ssd1306_DrawImage(uint8_t x, uint8_t y, uint8_t width, uint8_t height, const uint8_t *image, SSD1306_COLOR color)
+{
+    if (x >= SSD1306_WIDTH || y >= SSD1306_HEIGHT)
+    {
+        return;
+    }
+    uint8_t page, shift;
+
+    // 清理绘图区域，并写入图像
+    for (uint8_t j = 0; j < (height - 1) / 8 + 1; j++)
+    {
+        /*遍历指定图像涉及的相关列*/
+        for (uint8_t i = 0; i < width; i++)
+        {
+            if (x + i >= 0 && x + i <= SSD1306_WIDTH) // 超出屏幕的内容不显示
+            {
+                /*负数坐标在计算页地址和移位时需要加一个偏移*/
+                page = y / 8;
+                shift = y % 8;
+                if (y < 0)
+                {
+                    page -= 1;
+                    shift += 8;
+                }
+                if (page + j >= 0 && page + j < SSD1306_PAGE)
+                {
+                    /*显示图像在当前页的内容*/
+                    if (color == White)
+                    {
+                        SSD1306_Buffer[(page + j) * 128 + x + i] = SSD1306_Buffer[(page + j) * 128 + x + i] & (0xff >> (8 - shift)) | (image[j * width + i] << shift);
+                    }
+                    else
+                    {
+                        SSD1306_Buffer[(page + j) * 128 + x + i] = (SSD1306_Buffer[(page + j) * 128 + x + i] | ~(0xff >> (8 - shift))) & (((image[j * width + i] << (shift))) ^ 0xff);
+                    }
+                }
+                if (page + j + 1 >= 0 && page + j + 1 < SSD1306_PAGE)
+                {
+                    /*显示图像在下一页的内容*/
+                    if (color == White)
+                    {
+                        SSD1306_Buffer[(page + j + 1) * 128 + x + i] = SSD1306_Buffer[(page + j + 1) * 128 + x + i] & (0xff << (shift)) | (image[j * width + i] >> (8 - shift));
+                    }
+                    else
+                    {
+                        SSD1306_Buffer[(page + j + 1) * 128 + x + i] = (SSD1306_Buffer[(page + j + 1) * 128 + x + i] | ~(0xff << (shift))) & ((image[j * width + i] >> (8 - shift)) ^ 0xff);
+                    };
+                }
+            }
+        }
+    }
+}
+void ssd1306_FillArea(uint8_t x, uint8_t y, uint8_t width, uint8_t height, SSD1306_COLOR color)
+{
+    if (x >= SSD1306_WIDTH || y >= SSD1306_HEIGHT)
+    {
+        return;
+    }
+    uint8_t page, shift;
+
+    // 清理绘图区域，并写入图像
+    for (uint8_t j = 0; j < (height - 1) / 8 + 1; j++)
+    {
+        /*遍历指定图像涉及的相关列*/
+        for (uint8_t i = 0; i < width; i++)
+        {
+            if (x + i >= 0 && x + i <= SSD1306_WIDTH) // 超出屏幕的内容不显示
+            {
+                /*负数坐标在计算页地址和移位时需要加一个偏移*/
+                page = y / 8;
+                shift = y % 8;
+                if (y < 0)
+                {
+                    page -= 1;
+                    shift += 8;
+                }
+                if (page + j >= 0 && page + j < SSD1306_PAGE)
+                {
+                    /*显示图像在当前页的内容*/
+                    if (color == Black)
+                    {
+                        SSD1306_Buffer[(page + j) * 128 + x + i] = SSD1306_Buffer[(page + j) * 128 + x + i] & (0xff >> (8 - shift));
+                    }
+                    else
+                    {
+                        SSD1306_Buffer[(page + j) * 128 + x + i] = (SSD1306_Buffer[(page + j) * 128 + x + i] | ~(0xff >> (8 - shift)));
+                    }
+                }
+                if (page + j + 1 >= 0 && page + j + 1 < SSD1306_PAGE)
+                {
+                    /*显示图像在下一页的内容*/
+                    if (color == Black)
+                    {
+                        SSD1306_Buffer[(page + j + 1) * 128 + x + i] = SSD1306_Buffer[(page + j + 1) * 128 + x + i] & (0xff << (shift));
+                    }
+                    else
+                    {
+                        SSD1306_Buffer[(page + j + 1) * 128 + x + i] = (SSD1306_Buffer[(page + j + 1) * 128 + x + i] | ~(0xff << (shift)));
+                    };
+                }
+            }
+        }
+    }
 }
 
 void ssd1306_SetContrast(const uint8_t value)

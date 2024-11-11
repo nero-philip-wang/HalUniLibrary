@@ -29,7 +29,10 @@
         "u_adc.h": "c",
         "u_app_fonts.h": "c",
         "u_app_ssd1306.h": "c",
-        "py32f0xx_ll_i2c.h": "c"
+        "py32f0xx_ll_i2c.h": "c",
+        "u_timer.h": "c",
+        "oled_data.h": "c",
+        "oled.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

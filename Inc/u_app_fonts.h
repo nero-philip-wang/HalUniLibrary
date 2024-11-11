@@ -4,32 +4,34 @@
 #define __SSD1306_FONTS_H__
 // Include only needed fonts
 
-#define SSD1306_INCLUDE_FONT_6x8
-// #define SSD1306_INCLUDE_FONT_7x10
-// #define SSD1306_INCLUDE_FONT_11x18
-// #define SSD1306_INCLUDE_FONT_16x26
-// #define SSD1306_INCLUDE_FONT_16x24
-
+#define SSD1306_INCLUDE_FONT_12x8
+#define SSD1306_INCLUDE_FONT_12x12
+// !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 typedef struct
 {
-	const uint8_t FontWidth; /*!< Font width in pixels */
-	uint8_t FontHeight;		 /*!< Font height in pixels */
-	const uint16_t *data;	 /*!< Pointer to data font data array */
-} FontDef;
+	const uint8_t FontWidth;   // font width in pixels, width of word has double width
+	const uint8_t FontHeight;  // font height in pixels
+	const uint8_t BytePreChar; // byte of per char
+	const uint8_t CharStart;   // ascii char start from
+	const uint8_t *AscIIData;  // pointer to font data array
+	const uint8_t DWCharStart; // pointer to font data array
+	const uint8_t *DWCharData; // pointer to font data array
+} ZFontDef;
 
-#ifdef SSD1306_INCLUDE_FONT_6x8
-extern FontDef Font_6x8;
+#ifdef SSD1306_INCLUDE_FONT_12x8
+extern ZFontDef * Font_12x8;
 #endif
-#ifdef SSD1306_INCLUDE_FONT_7x10
-extern FontDef Font_7x10;
+
+
+#ifdef SSD1306_INCLUDE_FONT_12x12
+extern ZFontDef * Font_12x12;
 #endif
-#ifdef SSD1306_INCLUDE_FONT_11x18
-extern FontDef Font_11x18;
+
+
+#define ni (uint8_t)0xf0
+#define hao (uint8_t)0xf1
+#define shi (uint8_t)0xf2
+#define jie (uint8_t)0xf3
+
+
 #endif
-#ifdef SSD1306_INCLUDE_FONT_16x26
-extern FontDef Font_16x26;
-#endif
-#ifdef SSD1306_INCLUDE_FONT_16x24
-extern FontDef Font_16x24;
-#endif
-#endif // __SSD1306_FONTS_H__

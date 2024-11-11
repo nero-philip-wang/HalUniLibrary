@@ -406,29 +406,14 @@
               <FilePath>..\Src\u_gpio.c</FilePath>
             </File>
             <File>
-              <FileName>u_flash.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\u_flash.c</FilePath>
-            </File>
-            <File>
-              <FileName>u_serial.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\u_serial.c</FilePath>
-            </File>
-            <File>
               <FileName>u_adc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Src\u_adc.c</FilePath>
             </File>
             <File>
-              <FileName>u_app_fonts.c</FileName>
+              <FileName>u_timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Src\u_app_fonts.c</FilePath>
-            </File>
-            <File>
-              <FileName>u_app_ssd1306.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Src\u_app_ssd1306.c</FilePath>
+              <FilePath>..\Src\u_timer.c</FilePath>
             </File>
             <File>
               <FileName>u_i2c1.c</FileName>
@@ -454,6 +439,16 @@
               <FileName>py32f0xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Src\py32f0xx_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>u_app_ssd1306.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\u_app_ssd1306.c</FilePath>
+            </File>
+            <File>
+              <FileName>u_app_fonts.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\u_app_fonts.c</FilePath>
             </File>
           </Files>
         </Group>
